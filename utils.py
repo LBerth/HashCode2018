@@ -16,6 +16,9 @@ class Photo:
     def common_tags(self, other):
         return len(list(set(self.tags).intersection(other.tags)))
 
+    def get_id(self):
+        return str(self.id)
+
     def __repr__(self):
         return f"Picture {self.id} : {self.orientation}, {self.nb_tags} -> {'/'.join(self.tags)}"
 
@@ -30,6 +33,9 @@ class MergedPhoto(Photo):
         self.id2 = pic2.id
         self.tags = MergedPhoto.merge(pic1, pic2)
         self.nb_tags = len(self.tags)
+
+    def get_id(self):
+        return str(self.id1) + ' ' + str(self.id2)
 
     def __repr__(self):
         return f"Picture {self.id1}, {self.id2} : VV, {self.nb_tags} -> {'/'.join(self.tags)}"
@@ -56,6 +62,16 @@ def write_output(output_file, slides):
 
         f.write(str(s.count('\n') - 1) + s)
 
+def write_output_vert(output_file, slides):
+    n = len(slides)
+    s = '\n'
+    i = 0
+    while i < n:
+        s += slides[i].get_id() + '\n'
+        i += 1
+    with open(output_file, 'w') as f:
+        f.write(str(s.count('\n') - 1) + s)
+
 
 def sort_pic_nb_tags(pics):
     return sorted(pics, key=lambda x: x.nb_tags, reverse=True)
@@ -72,6 +88,16 @@ def compute_transition(pic1, pic2):
             only1.append(tag)
     only2 = [pic2.tags[i] for i in range(len(pic2.tags)) if not idx[i]]
     return min(len(only1), len(common), len(only2))
+
+
+def compute_slide_vert(slide):
+    score = 0
+    n, i = len(slide), 0
+    i = 0
+    while i < len(slide)-1:
+        score += compute_transition(slide[i], slide[i+1])
+        i += 1
+    return score
 
 
 def compute_slide(slide):
@@ -91,7 +117,6 @@ def compute_slide(slide):
         score += compute_transition(merged_slide[i], merged_slide[i+1])
         i += 1
     return score
-
 
 def get_tags_dict(pictures):
     tag_dict = {}
@@ -129,6 +154,7 @@ def merge_verticals(pictures):
     while len(vertical_pics) > 1:
         pic = vertical_pics.pop(0)
         diff = get_most_different(vertical_pics, pic)
+        vertical_pics.pop(vertical_pics.index(diff))
         merged_pics.append(MergedPhoto(pic, diff))
 
     return horizon_pics + merged_pics
@@ -157,42 +183,30 @@ def brutal_slide(pictures):
     return slides
 
 def bourrin_slide(pictures):
+    print("Sorting pictures...")
     sorted_pics = sort_pic_nb_tags(pictures)
     slides = []
     slides.append(sorted_pics.pop(0))
 
-    condition = True
-
-    while condition :
+    print("Creating Slides...")
+    while len(sorted_pics) > 0 :
         pic = slides[-1]
-        if len(slides) % 1000 == 0 : print("len slides = ", len(slides))
-        if pic.orientation == 'H':
-            best_score = -1
-            best_pic = pic
-            id_best_pic = -1
-            for i in range(len(sorted_pics)) :
-                other_pic = sorted_pics[i]
-                score = compute_transition(pic, other_pic)
-                if score > best_score :
-                    best_score = score
-                    best_pic = other_pic
-                    id_best_pic = i
-                if best_score >= int(pic.nb_tags / 2) : break
-            slides.append(sorted_pics.pop(id_best_pic))
+        if len(slides) % 2000 == 0 : print("Done ", round(len(slides)/len(processed_pics)*100,2))
 
-        else :
-            # methode débile on prend la première verticale qui passe
-            best_pic = pic
-            id_best_pic = -1
-            for i in range(len(sorted_pics)) :
-                other_pic = sorted_pics[i]
-                if other_pic.orientation == 'V' :
-                    best_pic = other_pic
-                    id_best_pic = i
-                    break
-            slides.append(sorted_pics.pop(id_best_pic))
+        best_score = -1
+        best_pic = pic
+        id_best_pic = -1
+        for i in range(len(sorted_pics)) :
+            other_pic = sorted_pics[i]
+            score = compute_transition(pic, other_pic)
+            if score > best_score :
+                best_score = score
+                best_pic = other_pic
+                id_best_pic = i
+            if best_score >= int(pic.nb_tags / 2) : break
+        slides.append(sorted_pics.pop(id_best_pic))
 
-        if len(sorted_pics) == 0 :
-            condition = False
+    print("Computing Score...")
+    print("SCORE = ", compute_slide_vert(slides))
 
     return slides

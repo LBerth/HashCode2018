@@ -20,23 +20,26 @@ data = data.split('\n')[:-1]
 
 n = int(data.pop(0))
 
+print("Parsing data...")
 pictures = []
 for i, line in enumerate(data):
-    if i%1000 == 0:
+    if i%10000 == 0:
         print(i)
     split_line = line.split()
     orientation = split_line.pop(0)
     nb_tags = int(split_line.pop(0))
     pictures.append(Photo(i, orientation, split_line))
 
-#slides = pictures.copy()
+print("Nb pictures = ", len(pictures))
+print("Processing pictures...")
+pictures = merge_verticals(pictures)
 
-slides = brutal_slide(pictures)
-slides_bourrin = bourrin_slide(pictures)
+#slides = brutal_slide(pictures)
+slides = bourrin_slide(pictures)
 
-print("Pictures : ", slides)
-print("Pictures sorted by tags :", sort_pic_nb_tags(slides))
-print("Slide score :", compute_slide(slides))
+# print("Pictures : ", slides)
+# print("Pictures sorted by tags :", sort_pic_nb_tags(slides))
+print("Slide score :", compute_slide_vert(slides))
 
 
-write_output(OUTPUT_FILE, slides)
+write_output_vert(OUTPUT_FILE, slides)
