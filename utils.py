@@ -115,12 +115,12 @@ def brutal_slide(pictures):
                 slides.append(p)
                 pictures_copy.remove(p)
             else:
-                if temp_pic != 0:
-                    slides.append(temp_pic)
+                try:
+                    temp_p = get_most_different(pictures_copy, p)
+                    slides.append(temp_p)
                     slides.append(p)
-                    temp_pic = 0
                     pictures_copy.remove(p)
-                else:
-                    temp_pic = p
-                    pictures_copy.remove(p)
+                    pictures_copy.remove(temp_p)
+                except:
+                    a = 0
     return slides
