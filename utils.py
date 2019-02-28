@@ -102,3 +102,25 @@ def get_most_different(pictures, picture):
             v_pics.append(pic)
 
     return min(v_pics, key=lambda pic:picture.common_tags(pic))
+
+def brutal_slide(pictures):
+    slides = []
+    pictures_copy = pictures.copy()
+    sorted_tag = get_tags_dict(pictures)
+    temp_pic = 0
+    for tag in sorted_tag:
+        pic_with_tag = find_pic_with_tag(tag, pictures_copy)
+        for p in pic_with_tag:
+            if p.orientation == "H":
+                slides.append(p)
+                pictures_copy.remove(p)
+            else:
+                if temp_pic != 0:
+                    slides.append(temp_pic)
+                    slides.append(p)
+                    temp_pic = 0
+                    pictures_copy.remove(p)
+                else:
+                    temp_pic = p
+                    pictures_copy.remove(p)
+    return slides
