@@ -16,6 +16,9 @@ class Photo:
     def common_tags(self, other):
         return len(list(set(self.tags).intersection(other.tags)))
 
+    def get_id(self):
+        return str(self.id)
+
     def __repr__(self):
         return f"Picture {self.id} : {self.orientation}, {self.nb_tags} -> {'/'.join(self.tags)}"
 
@@ -31,29 +34,21 @@ class MergedPhoto(Photo):
         self.tags = MergedPhoto.merge(pic1, pic2)
         self.nb_tags = len(self.tags)
 
+    def get_id(self):
+        return str(self.id1) + ' ' + str(self.id2)
+
     def __repr__(self):
         return f"Picture {self.id1}, {self.id2} : VV, {self.nb_tags} -> {'/'.join(self.tags)}"
 
 
 def write_output(output_file, slides):
     n = len(slides)
-
     s = '\n'
     i = 0
     while i < n:
-        if i < n-1 and slides[i].orientation == 'V' and slides[i+1].orientation != 'V':
-            i += 1
-            continue
-
-        s += str(slides[i].id)
-        if i < n-1 and slides[i].orientation == 'V':
-            assert slides[i+1].orientation == 'V'
-            s += ' ' + str(slides[i+1].id)
-            i += 1
-        s += '\n'
+        s += slides[i].get_id() + '\n'
         i += 1
     with open(output_file, 'w') as f:
-
         f.write(str(s.count('\n') - 1) + s)
 
 
@@ -77,18 +72,9 @@ def compute_transition(pic1, pic2):
 def compute_slide(slide):
     score = 0
     n, i = len(slide), 0
-    merged_slide = []
     i = 0
-    while i < n:
-        if i < n-1 and slide[i].orientation == 'V':
-            merged_slide.append(Photo.merge(slide[i], slide[i+1]))
-            i += 1
-        else:
-            merged_slide.append(slide[i])
-        i += 1
-    i = 0
-    while i < len(merged_slide)-1:
-        score += compute_transition(merged_slide[i], merged_slide[i+1])
+    while i < len(slide)-1:
+        score += compute_transition(slide[i], slide[i+1])
         i += 1
     return score
 
@@ -129,6 +115,7 @@ def merge_verticals(pictures):
     while len(vertical_pics) > 1:
         pic = vertical_pics.pop(0)
         diff = get_most_different(vertical_pics, pic)
+        vertical_pics.pop(vertical_pics.index(diff))
         merged_pics.append(MergedPhoto(pic, diff))
 
     return horizon_pics + merged_pics

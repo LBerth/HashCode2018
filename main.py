@@ -29,13 +29,13 @@ for i, line in enumerate(data):
     nb_tags = int(split_line.pop(0))
     pictures.append(Photo(i, orientation, split_line))
 
-#slides = pictures.copy()
+slides = merge_verticals(pictures)
 
 slides = brutal_slide(pictures)
 slides_bourrin = bourrin_slide(pictures)
 
-print("Pictures : ", slides)
-print("Pictures sorted by tags :", sort_pic_nb_tags(slides))
+# print("Pictures : ", slides)
+# print("Pictures sorted by tags :", sort_pic_nb_tags(slides))
 print("Slide score :", compute_slide(slides))
 
 
