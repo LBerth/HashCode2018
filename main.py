@@ -33,13 +33,15 @@ for i, line in enumerate(data):
 print("Nb pictures = ", len(pictures))
 print("Processing pictures...")
 pictures = merge_verticals_dumb(pictures)
+print("Processing done")
 
 #slides = brutal_slide(pictures)
 slides = segment_bourrin(pictures)
+# slides = bourrin_slide(pictures)
 
 # print("Pictures : ", slides)
 # print("Pictures sorted by tags :", sort_pic_nb_tags(slides))
-print("Slide score :", compute_slide_vert(slides))
+# print("Slide score :", compute_slide_vert(slides))
 
 
-write_output_vert(OUTPUT_FILE, slides)
+# write_output_vert(OUTPUT_FILE, slides)

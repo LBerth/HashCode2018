@@ -131,8 +131,8 @@ def get_tags_dict(pictures):
 def find_pic_with_tag(tag, pictures):
     pic_list = []
     for pic in pictures:
-            if tag in pic.tags:
-                    pic_list.append(pic)
+        if tag in pic.tags:
+            pic_list.append(pic)
     return pic_list
 
 def get_most_different(pictures, picture):
@@ -207,6 +207,7 @@ def brutal_slide(pictures):
 def bourrin_slide(pictures):
     print("Sorting pictures...")
     sorted_pics = sort_pic_nb_tags(pictures)
+    # sorted_pics = pictures.copy()
     slides = []
     slides.append(sorted_pics.pop(0))
 
@@ -218,7 +219,7 @@ def bourrin_slide(pictures):
         best_score = -1
         best_pic = pic
         id_best_pic = -1
-        for i in range(min(len(sorted_pics), 200)) :
+        for i in range(min(len(sorted_pics), 1000)) :
             other_pic = sorted_pics[i]
             score = compute_transition(pic, other_pic)
             if score > best_score :
@@ -233,10 +234,31 @@ def bourrin_slide(pictures):
 
     return slides
 
+import threading
+
+class Test:
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.res = [[] for i in range(1000)]
+
+    def run(self, i, pictures):
+        l = pictures[(i*10000):min((i+1)*10000, len(pictures))]
+        self.res[i] = bourrin_slide(l)
+
+
 def segment_bourrin(pictures):
     slides = []
     index = 0
-    while (index * 2000 < len(pictures)):
-        slides += bourrin_slide(pictures[(index * 2000) : min((index+1)*2000, len(pictures))])
-        index += 1
-    return slides
+    test = Test()
+    threads = []
+    for index in range(len(pictures)//10000):
+        threads.append(threading.Thread(target=lambda: test.run(index, pictures)))
+
+    for t in threads:
+        t.start()
+
+    for t in threads:
+        t.join()
+
+    return test
