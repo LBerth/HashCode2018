@@ -59,12 +59,18 @@ def compute_transition(pic1, pic2):
 def compute_slide(slide):
     score = 0
     n, i = len(slide), 0
-    while i < n-1:
-        if i < n-2 and slide[i+1].orientation == 'V':
-            score += compute_transition(slide[i], Photo.merge(slide[i+1], slide[i+2]))
+    merged_slide = []
+    i = 0
+    while i < n:
+        if slide[i].orientation == 'V':
+            merged_slide.append(Photo.merge(slide[i], slide[i+1]))
             i += 1
         else:
-            score += compute_transition(slide[i], slide[i+1])
+            merged_slide.append(slide[i])
+        i += 1
+    i = 0
+    while i < len(merged_slide)-1:
+        score += compute_transition(merged_slide[i], merged_slide[i+1])
         i += 1
     return score
 
