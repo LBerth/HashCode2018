@@ -1,6 +1,8 @@
 import sys
 import os
 
+from utils import *
+
 if len(sys.argv) > 1:
     INPUT_FILE = sys.argv[1]
 else:
@@ -30,4 +32,4 @@ print("Pictures sorted by tags :", sort_pic_nb_tags(pictures))
 print("Slide score :", compute_slide(pictures))
 
 slides = pictures.copy()
-write_output(slides)
+write_output(OUTPUT_FILE, slides)

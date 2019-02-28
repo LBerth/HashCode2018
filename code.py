@@ -69,8 +69,10 @@ def compute_slide(slide):
     n, i = len(slide), 0
     while i < n-1:
         if i < n-2 and slide[i+1].orientation == 'V':
-            score += compute_transition(slide[i], Photo.merge(slide[i], slide[i+1]))
+            score += compute_transition(slide[i], Photo.merge(slide[i+1], slide[i+2]))
             i += 1
+        else:
+            score += compute_transition(slide[i], slide[i+1])
         i += 1
     return score
 
@@ -95,9 +97,9 @@ for i, line in enumerate(data):
     nb_tags = int(split_line.pop(0))
     pictures.append(Photo(i, orientation, split_line))
 
-print("Pictures : ", pictures)
-print("Pictures sorted by tags :", sort_pic_nb_tags(pictures))
-print("Slide score :", compute_slide(pictures))
+# print("Pictures : ", pictures)
+# print("Pictures sorted by tags :", sort_pic_nb_tags(pictures))
+# print("Slide score :", compute_slide(pictures))
 
 
 def find_pic_with_tag(tag, pictures):
@@ -108,5 +110,5 @@ def find_pic_with_tag(tag, pictures):
     return pic_list
 
 
-slides = pictures.copy()
-write_output(slides)
+# slides = pictures.copy()
+# write_output(slides)

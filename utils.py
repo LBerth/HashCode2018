@@ -17,18 +17,19 @@ class Photo:
         return f"Picture {self.id} : {self.orientation}, {self.nb_tags} -> {'/'.join(self.tags)}"
 
 
-def write_output(slides):
+def write_output(output_file, slides):
     n = len(slides)
-    s = str(n) + '\n'
+    m = n - len(list(filter(lambda pic:pic.orientation == 'V', slides))) // 2
+    s = str(m) + '\n'
     i = 0
     while i < n:
         s += str(slides[i].id)
-        if i < n - 1 and slides[i].orientation == 'V':
+        if i < n - 1 and slides[i+1].orientation == 'V':
             s += ' ' + str(slides[i+1].id)
             i += 1
         s += '\n'
         i += 1
-    with open(OUTPUT_FILE, 'w') as f:
+    with open(output_file, 'w') as f:
         f.write(s)
 
 
