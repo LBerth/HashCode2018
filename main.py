@@ -22,34 +22,14 @@ n = int(data.pop(0))
 
 pictures = []
 for i, line in enumerate(data):
+    if i%1000 == 0:
+        print(i)
     split_line = line.split()
     orientation = split_line.pop(0)
     nb_tags = int(split_line.pop(0))
     pictures.append(Photo(i, orientation, split_line))
 
 #slides = pictures.copy()
-
-def brutal_slide(pictures):
-    slides = []
-    pictures_copy = pictures.copy()
-    sorted_tag = get_tags_dict(pictures)
-    temp_pic = 0
-    for tag in sorted_tag:
-        pic_with_tag = find_pic_with_tag(tag, pictures_copy)
-        for p in pic_with_tag:
-            if p.orientation == "H":
-                slides.append(p)
-                pictures_copy.remove(p)
-            else:
-                if temp_pic != 0:
-                    slides.append(temp_pic)
-                    slides.append(p)
-                    temp_pic = 0
-                    pictures_copy.remove(p)
-                else:
-                    temp_pic = p
-                    pictures_copy.remove(p)
-    return slides
 
 slides = brutal_slide(pictures)
 

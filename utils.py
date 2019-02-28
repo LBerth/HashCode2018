@@ -132,3 +132,25 @@ def merge_verticals(pictures):
         merged_pics.append(MergedPhoto(pic, diff))
 
     return horizon_pics + merged_pics
+
+def brutal_slide(pictures):
+    slides = []
+    pictures_copy = pictures.copy()
+    sorted_tag = get_tags_dict(pictures)
+    temp_pic = 0
+    for tag in sorted_tag:
+        pic_with_tag = find_pic_with_tag(tag, pictures_copy)
+        for p in pic_with_tag:
+            if p.orientation == "H":
+                slides.append(p)
+                pictures_copy.remove(p)
+            else:
+                try:
+                    temp_p = get_most_different(pictures_copy, p)
+                    slides.append(temp_p)
+                    slides.append(p)
+                    pictures_copy.remove(p)
+                    pictures_copy.remove(temp_p)
+                except:
+                    a = 0
+    return slides
