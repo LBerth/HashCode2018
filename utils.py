@@ -43,6 +43,27 @@ class MergedPhoto(Photo):
 
 def write_output(output_file, slides):
     n = len(slides)
+
+    s = '\n'
+    i = 0
+    while i < n:
+        if i < n-1 and slides[i].orientation == 'V' and slides[i+1].orientation != 'V':
+            i += 1
+            continue
+
+        s += str(slides[i].id)
+        if i < n-1 and slides[i].orientation == 'V':
+            assert slides[i+1].orientation == 'V'
+            s += ' ' + str(slides[i+1].id)
+            i += 1
+        s += '\n'
+        i += 1
+    with open(output_file, 'w') as f:
+
+        f.write(str(s.count('\n') - 1) + s)
+
+def write_output_vert(output_file, slides):
+    n = len(slides)
     s = '\n'
     i = 0
     while i < n:
@@ -69,7 +90,7 @@ def compute_transition(pic1, pic2):
     return min(len(only1), len(common), len(only2))
 
 
-def compute_slide(slide):
+def compute_slide_vert(slide):
     score = 0
     n, i = len(slide), 0
     i = 0
@@ -78,6 +99,24 @@ def compute_slide(slide):
         i += 1
     return score
 
+
+def compute_slide(slide):
+    score = 0
+    n, i = len(slide), 0
+    merged_slide = []
+    i = 0
+    while i < n:
+        if i < n-1 and slide[i].orientation == 'V':
+            merged_slide.append(Photo.merge(slide[i], slide[i+1]))
+            i += 1
+        else:
+            merged_slide.append(slide[i])
+        i += 1
+    i = 0
+    while i < len(merged_slide)-1:
+        score += compute_transition(merged_slide[i], merged_slide[i+1])
+        i += 1
+    return score
 
 def get_tags_dict(pictures):
     tag_dict = {}
