@@ -210,3 +210,11 @@ def bourrin_slide(pictures):
     print("SCORE = ", compute_slide_vert(slides))
 
     return slides
+
+def segment_bourrin(pictures):
+    slides = []
+    index = 0
+    while (index * 2000 < len(pictures)):
+        slides += bourrin_slide(pictures[(index * 2000) : min((index+1)*2000, len(pictures))])
+        index += 1
+    return slides
