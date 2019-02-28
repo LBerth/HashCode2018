@@ -31,8 +31,10 @@ def write_output(slides):
     with open(OUTPUT_FILE, 'w') as f:
         f.write(s)
 
+
 def sort_pic_nb_tags(pics):
     return sorted(pics, key=lambda x: x.nb_tags, reverse=True)
+
 
 def compute_transition(pic1, pic2):
     only1, common = [], []
@@ -52,8 +54,10 @@ def compute_slide(slide):
     n, i = len(slide), 0
     while i < n-1:
         if i < n-2 and slide[i+1].orientation == 'V':
-            score += compute_transition(slide[i], Photo.merge(slide[i], slide[i+1]))
+            score += compute_transition(slide[i], Photo.merge(slide[i+1], slide[i+2]))
             i += 1
+        else:
+            score += compute_transition(slide[i], slide[i+1])
         i += 1
     return score
 
