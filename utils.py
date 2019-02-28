@@ -199,8 +199,8 @@ def bourrin_slide(pictures):
 
 def segment_bourrin(pictures):
     slides = []
-    index = 1
+    index = 0
     while (index * 2000 < len(pictures)):
-        slides += bourrin_slide(pictures[(index * 2000)-1 : min((index+1)*2000-1, len(pictures))])
+        slides += bourrin_slide(pictures[(index * 2000) : min((index+1)*2000, len(pictures))])
         index += 1
     return slides
