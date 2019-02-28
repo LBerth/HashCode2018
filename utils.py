@@ -109,6 +109,7 @@ def brutal_slide(pictures):
     sorted_tag = get_tags_dict(pictures)
     temp_pic = 0
     for tag in sorted_tag:
+        print(len(pictures_copy))
         pic_with_tag = find_pic_with_tag(tag, pictures_copy)
         for p in pic_with_tag:
             if p.orientation == "H":
