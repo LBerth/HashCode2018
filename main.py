@@ -27,10 +27,6 @@ for i, line in enumerate(data):
     nb_tags = int(split_line.pop(0))
     pictures.append(Photo(i, orientation, split_line))
 
-print("Pictures : ", pictures)
-print("Pictures sorted by tags :", sort_pic_nb_tags(pictures))
-print("Slide score :", compute_slide(pictures))
-
 #slides = pictures.copy()
 
 def brutal_slide(pictures):
@@ -54,7 +50,12 @@ def brutal_slide(pictures):
                     temp_pic = p
                     pictures_copy.remove(p)
     return slides
-brutal_slide(pictures)
+
+slides = brutal_slide(pictures)
+
+print("Pictures : ", slides)
+print("Pictures sorted by tags :", sort_pic_nb_tags(slides))
+print("Slide score :", compute_slide(slides))
                 
 
 write_output(OUTPUT_FILE, slides)

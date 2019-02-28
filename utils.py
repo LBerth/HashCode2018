@@ -62,7 +62,7 @@ def compute_slide(slide):
     merged_slide = []
     i = 0
     while i < n:
-        if slide[i].orientation == 'V':
+        if i < n-1 and slide[i].orientation == 'V':
             merged_slide.append(Photo.merge(slide[i], slide[i+1]))
             i += 1
         else:
