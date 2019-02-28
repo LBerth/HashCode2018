@@ -6,7 +6,7 @@ from utils import *
 if len(sys.argv) > 1:
     INPUT_FILE = sys.argv[1]
 else:
-    INPUT_FILE = "c_memorable_moments.txt"
+    INPUT_FILE = "e_shiny_selfies.txt"
 
 if not os.path.isdir("./outputs"):
     os.mkdir("outputs")
@@ -35,7 +35,7 @@ print("Processing pictures...")
 pictures = merge_verticals_dumb(pictures)
 
 #slides = brutal_slide(pictures)
-slides = bourrin_slide(pictures)
+slides = segment_bourrin(pictures)
 
 # print("Pictures : ", slides)
 # print("Pictures sorted by tags :", sort_pic_nb_tags(slides))

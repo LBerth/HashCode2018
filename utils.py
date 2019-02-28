@@ -187,6 +187,7 @@ def brutal_slide(pictures):
     sorted_tag = get_tags_dict(pictures)
     temp_pic = 0
     for tag in sorted_tag:
+        print(len(pictures_copy))
         pic_with_tag = find_pic_with_tag(tag, pictures_copy)
         for p in pic_with_tag:
             if p.orientation == "H":
@@ -230,4 +231,12 @@ def bourrin_slide(pictures):
     print("Computing Score...")
     print("SCORE = ", compute_slide_vert(slides))
 
+    return slides
+
+def segment_bourrin(pictures):
+    slides = []
+    index = 0
+    while (index * 2000 < len(pictures)):
+        slides += bourrin_slide(pictures[(index * 2000) : min((index+1)*2000, len(pictures))])
+        index += 1
     return slides
