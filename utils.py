@@ -13,6 +13,9 @@ class Photo:
         self.nb_tags = len(tags)
         self.tags = tags
 
+    def common_tags(self, other):
+        return len(list(set(self.tags).intersection(other.tags)))
+
     def __repr__(self):
         return f"Picture {self.id} : {self.orientation}, {self.nb_tags} -> {'/'.join(self.tags)}"
 
@@ -91,3 +94,11 @@ def find_pic_with_tag(tag, pictures):
             if tag in pic.tags:
                     pic_list.append(pic)
     return pic_list
+
+def get_most_different(pictures, picture):
+    v_pics = []
+    for pic in pictures:
+        if pic.orientation == 'V' and pic != picture:
+            v_pics.append(pic)
+
+    return min(v_pics, key=lambda pic:picture.common_tags(pic))
