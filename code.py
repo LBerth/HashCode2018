@@ -109,6 +109,18 @@ def find_pic_with_tag(tag, pictures):
                     pic_list.append(pic)
     return pic_list
 
+#slides = pictures.copy()
+slides = []
+pictures_copy = pictures.copy()
+sorted_tag = get_tags_dict(pictures)
+for tag in sorted_tag:
+    pic_with_tag = find_pic_with_tag(tag, pictures_copy)
+    for p in pic_with_tag:
+        slides.append(p)
+        pictures_copy.remove(p)
+ a=0
+
+write_output(slides)
 
 # slides = pictures.copy()
 # write_output(slides)
