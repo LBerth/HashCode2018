@@ -23,8 +23,13 @@ def write_output(output_file, slides):
     s = str(m) + '\n'
     i = 0
     while i < n:
+        if i < n-1 and slides[i].orientation == 'V' and slides[i+1].orientation != 'V':
+            i += 1
+            continue
+
         s += str(slides[i].id)
-        if i < n - 1 and slides[i+1].orientation == 'V':
+        if i < n-1 and slides[i].orientation == 'V':
+            assert slides[i+1].orientation == 'V'
             s += ' ' + str(slides[i+1].id)
             i += 1
         s += '\n'
