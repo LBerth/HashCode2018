@@ -32,25 +32,29 @@ print("Pictures sorted by tags :", sort_pic_nb_tags(pictures))
 print("Slide score :", compute_slide(pictures))
 
 #slides = pictures.copy()
-slides = []
-pictures_copy = pictures.copy()
-sorted_tag = get_tags_dict(pictures)
-temp_pic = 0
-for tag in sorted_tag:
-    pic_with_tag = find_pic_with_tag(tag, pictures_copy)
-    for p in pic_with_tag:
-        if p.orientation == "H":
-            slides.append(p)
-            pictures_copy.remove(p)
-        else:
-            if temp_pic != 0:
-                slides.append(temp_pic)
+
+def brutal_slide(pictures):
+    slides = []
+    pictures_copy = pictures.copy()
+    sorted_tag = get_tags_dict(pictures)
+    temp_pic = 0
+    for tag in sorted_tag:
+        pic_with_tag = find_pic_with_tag(tag, pictures_copy)
+        for p in pic_with_tag:
+            if p.orientation == "H":
                 slides.append(p)
-                temp_pic = 0
                 pictures_copy.remove(p)
             else:
-                temp_pic = p
-                pictures_copy.remove(p)
+                if temp_pic != 0:
+                    slides.append(temp_pic)
+                    slides.append(p)
+                    temp_pic = 0
+                    pictures_copy.remove(p)
+                else:
+                    temp_pic = p
+                    pictures_copy.remove(p)
+    return slides
+brutal_slide(pictures)
                 
 
 write_output(OUTPUT_FILE, slides)
