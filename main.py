@@ -32,7 +32,7 @@ for i, line in enumerate(data):
 
 print("Nb pictures = ", len(pictures))
 print("Processing pictures...")
-pictures = merge_verticals(pictures)
+pictures = merge_verticals_dumb(pictures)
 
 #slides = brutal_slide(pictures)
 slides = bourrin_slide(pictures)

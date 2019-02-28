@@ -143,6 +143,9 @@ def get_most_different(pictures, picture):
 
     return min(v_pics, key=lambda pic:picture.common_tags(pic))
 
+def get_most_different_vert(pictures, picture):
+    return min(range(len(pictures)), key=lambda i:picture.common_tags(pictures[i]))
+
 def merge_verticals(pictures):
     horizon_pics, vertical_pics = [], []
     for pic in pictures:
@@ -153,9 +156,28 @@ def merge_verticals(pictures):
     merged_pics = []
     while len(vertical_pics) > 1:
         pic = vertical_pics.pop(0)
-        diff = get_most_different(vertical_pics, pic)
-        vertical_pics.pop(vertical_pics.index(diff))
+        i_diff = get_most_different_vert(vertical_pics, pic)
+        merged_pics.append(MergedPhoto(pic, vertical_pics[i_diff]))
+        vertical_pics.pop(i_diff)
+
+    return horizon_pics + merged_pics
+
+
+def merge_verticals_dumb(pictures):
+    horizon_pics, vertical_pics = [], []
+    for pic in pictures:
+        if pic.orientation == 'V':
+            vertical_pics.append(pic)
+        else:
+            horizon_pics.append(pic)
+    merged_pics = []
+    while len(vertical_pics) > 1:
+        pic = vertical_pics.pop(0)
+        diff = vertical_pics.pop(0)
+        # i_diff = get_most_different_vert(vertical_pics, pic)
         merged_pics.append(MergedPhoto(pic, diff))
+        # vertical_pics.pop(i_diff)
+        len(vertical_pics)
 
     return horizon_pics + merged_pics
 
@@ -190,12 +212,12 @@ def bourrin_slide(pictures):
     print("Creating Slides...")
     while len(sorted_pics) > 0 :
         pic = slides[-1]
-        if len(slides) % 2000 == 0 : print("Done ", round(len(slides)/len(processed_pics)*100,2))
+        if len(slides) % 2000 == 0 : print("Done ", round(len(slides)/len(pictures)*100,2))
 
         best_score = -1
         best_pic = pic
         id_best_pic = -1
-        for i in range(len(sorted_pics)) :
+        for i in range(min(len(sorted_pics), 200)) :
             other_pic = sorted_pics[i]
             score = compute_transition(pic, other_pic)
             if score > best_score :
