@@ -155,3 +155,44 @@ def brutal_slide(pictures):
                 except:
                     a = 0
     return slides
+
+def bourrin_slide(pictures):
+    sorted_pics = sort_pic_nb_tags(pictures)
+    slides = []
+    slides.append(sorted_pics.pop(0))
+
+    condition = True
+
+    while condition :
+        pic = slides[-1]
+        if len(slides) % 1000 == 0 : print("len slides = ", len(slides))
+        if pic.orientation == 'H':
+            best_score = -1
+            best_pic = pic
+            id_best_pic = -1
+            for i in range(len(sorted_pics)) :
+                other_pic = sorted_pics[i]
+                score = compute_transition(pic, other_pic)
+                if score > best_score :
+                    best_score = score
+                    best_pic = other_pic
+                    id_best_pic = i
+                if best_score >= int(pic.nb_tags / 2) : break
+            slides.append(sorted_pics.pop(id_best_pic))
+
+        else :
+            # methode débile on prend la première verticale qui passe
+            best_pic = pic
+            id_best_pic = -1
+            for i in range(len(sorted_pics)) :
+                other_pic = sorted_pics[i]
+                if other_pic.orientation == 'V' :
+                    best_pic = other_pic
+                    id_best_pic = i
+                    break
+            slides.append(sorted_pics.pop(id_best_pic))
+
+        if len(sorted_pics) == 0 :
+            condition = False
+
+    return slides

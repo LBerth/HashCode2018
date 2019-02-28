@@ -32,10 +32,11 @@ for i, line in enumerate(data):
 #slides = pictures.copy()
 
 slides = brutal_slide(pictures)
+slides_bourrin = bourrin_slide(pictures)
 
 print("Pictures : ", slides)
 print("Pictures sorted by tags :", sort_pic_nb_tags(slides))
 print("Slide score :", compute_slide(slides))
-                
+
 
 write_output(OUTPUT_FILE, slides)
