@@ -196,3 +196,11 @@ def bourrin_slide(pictures):
             condition = False
 
     return slides
+
+def segment_bourrin(pictures):
+    slides = []
+    index = 1
+    while (index * 2000 < len(pictures)):
+        slides += bourrin_slide(pictures[(index * 2000)-1 : min((index+1)*2000-1, len(pictures))])
+        index += 1
+    return slides

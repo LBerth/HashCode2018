@@ -6,7 +6,7 @@ from utils import *
 if len(sys.argv) > 1:
     INPUT_FILE = sys.argv[1]
 else:
-    INPUT_FILE = "c_memorable_moments.txt"
+    INPUT_FILE = "e_shiny_selfies.txt"
 
 if not os.path.isdir("./outputs"):
     os.mkdir("outputs")
@@ -31,8 +31,8 @@ for i, line in enumerate(data):
 
 #slides = pictures.copy()
 
-slides = brutal_slide(pictures)
-slides_bourrin = bourrin_slide(pictures)
+#slides = brutal_slide(pictures)
+slides = bourrin_slide(pictures)
 
 print("Pictures : ", slides)
 print("Pictures sorted by tags :", sort_pic_nb_tags(slides))
