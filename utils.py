@@ -19,13 +19,12 @@ class Photo:
 
 def write_output(output_file, slides):
     n = len(slides)
-    m = n - len(list(filter(lambda pic:pic.orientation == 'V', slides))) // 2
+
     s = '\n'
     i = 0
     while i < n:
         if i < n-1 and slides[i].orientation == 'V' and slides[i+1].orientation != 'V':
             i += 1
-            m -= 1
             continue
 
         s += str(slides[i].id)
@@ -36,7 +35,8 @@ def write_output(output_file, slides):
         s += '\n'
         i += 1
     with open(output_file, 'w') as f:
-        f.write(str(m) + s)
+
+        f.write(str(s.count('\n') - 1) + s)
 
 
 def sort_pic_nb_tags(pics):
