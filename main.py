@@ -32,7 +32,7 @@ for i, line in enumerate(data):
 #slides = pictures.copy()
 
 #slides = brutal_slide(pictures)
-slides = bourrin_slide(pictures)
+slides = segment_bourrin(pictures)
 
 print("Pictures : ", slides)
 print("Pictures sorted by tags :", sort_pic_nb_tags(slides))
