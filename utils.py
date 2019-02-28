@@ -20,6 +20,21 @@ class Photo:
         return f"Picture {self.id} : {self.orientation}, {self.nb_tags} -> {'/'.join(self.tags)}"
 
 
+class MergedPhoto(Photo):
+
+    def merge(pic1, pic2):
+        return list(set(pic1.tags).union(pic2.tags))
+
+    def __init__(self, pic1, pic2):
+        self.id1 = pic1.id
+        self.id2 = pic2.id
+        self.tags = MergedPhoto.merge(pic1, pic2)
+        self.nb_tags = len(self.tags)
+
+    def __repr__(self):
+        return f"Picture {self.id1}, {self.id2} : VV, {self.nb_tags} -> {'/'.join(self.tags)}"
+
+
 def write_output(output_file, slides):
     n = len(slides)
 
@@ -102,6 +117,21 @@ def get_most_different(pictures, picture):
             v_pics.append(pic)
 
     return min(v_pics, key=lambda pic:picture.common_tags(pic))
+
+def merge_verticals(pictures):
+    horizon_pics, vertical_pics = [], []
+    for pic in pictures:
+        if pic.orientation == 'V':
+            vertical_pics.append(pic)
+        else:
+            horizon_pics.append(pic)
+    merged_pics = []
+    while len(vertical_pics) > 1:
+        pic = vertical_pics.pop(0)
+        diff = get_most_different(vertical_pics, pic)
+        merged_pics.append(MergedPhoto(pic, diff))
+
+    return horizon_pics + merged_pics
 
 def brutal_slide(pictures):
     slides = []
