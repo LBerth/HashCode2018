@@ -6,7 +6,7 @@ from utils import *
 if len(sys.argv) > 1:
     INPUT_FILE = sys.argv[1]
 else:
-    INPUT_FILE = "e_shiny_selfies.txt"
+    INPUT_FILE = "data/e_shiny_selfies.txt"
 
 if not os.path.isdir("./outputs"):
     os.mkdir("outputs")
